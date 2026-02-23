@@ -30,6 +30,7 @@ import {fileURLToPath} from "node:url";
 import {OAuth2Client} from "google-auth-library";
 import express from "express";
 import session from "express-session";
+import rateLimit from "express-rate-limit";
 import {createProxyMiddleware} from "http-proxy-middleware";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -72,13 +73,31 @@ app.use(
   })
 );
 
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+
+/** Limit auth endpoints to 20 requests per minute per IP. */
+const authLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+/** General rate limit for static file fallback (200 requests per minute per IP). */
+const staticLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
 // ── Auth routes ───────────────────────────────────────────────────────────────
 
 /**
  * GET /auth/login
  * Redirects the browser to Google's OAuth 2.0 consent screen.
  */
-app.get("/auth/login", (_req, res) => {
+app.get("/auth/login", authLimiter, (_req, res) => {
   const url = oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: ["openid", "email", "profile"],
@@ -93,7 +112,7 @@ app.get("/auth/login", (_req, res) => {
  * Exchanges the authorization code for tokens, verifies the ID token, and
  * stores the user payload in the session.
  */
-app.get("/auth/callback", async (req, res) => {
+app.get("/auth/callback", authLimiter, async (req, res) => {
   const {code, error} = req.query;
 
   if (error) {
@@ -108,6 +127,10 @@ app.get("/auth/callback", async (req, res) => {
   try {
     const {tokens} = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
+
+    if (!tokens.id_token) {
+      throw new Error("No ID token received from Google");
+    }
 
     const ticket = await oauth2Client.verifyIdToken({
       idToken: tokens.id_token,
@@ -145,7 +168,7 @@ app.get("/auth/logout", (req, res) => {
  * GET /auth/user
  * Returns the currently authenticated user as JSON, or 401 if not signed in.
  */
-app.get("/auth/user", (req, res) => {
+app.get("/auth/user", authLimiter, (req, res) => {
   if (req.session.user) {
     res.json(req.session.user);
   } else {
@@ -160,7 +183,7 @@ if (isProd) {
   app.use(express.static(path.join(__dirname, "dist")));
 
   // Fall back to index.html for client-side routing.
-  app.use((_req, res) => {
+  app.use(staticLimiter, (_req, res) => {
     res.sendFile(path.join(__dirname, "dist", "index.html"));
   });
 } else {
