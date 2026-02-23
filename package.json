@@ -1,0 +1,21 @@
+{
+  "name": "gcp-oauth",
+  "version": "1.0.0",
+  "description": "An Observable Framework app that handles Google Cloud Platform OAuth flow",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently --kill-others \"observable preview --port 3001\" \"node server.js\"",
+    "build": "observable build",
+    "start": "node server.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@observablehq/framework": "^1.13.3",
+    "concurrently": "^9.2.1",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "google-auth-library": "^10.5.0",
+    "http-proxy-middleware": "^3.0.5"
+  }
+}
