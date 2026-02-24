@@ -3,30 +3,29 @@ title: Terms of Service
 ---
 
 ```js
-import "dotenv/config";
+const config = await fetch("/site-config")
+	.then((response) => (response.ok ? response.json() : {}))
+	.catch(() => ({}));
+
+const SUPPORT_EMAIL = config.supportEmail ?? "support@example.com";
+const BUSINESS_ADDRESS = config.businessAddress ?? "Your address";
+const BUSINESS_CITY = config.businessCity ?? "Your city";
+const BUSINESS_NAME = config.businessName ?? "Your Company or Name";
+const BUSINESS_COUNTRY = config.businessCountry ?? "Your country";
 ```
 
 # Terms of Service
 
 Last updated: February 23, 2026
 
-```js
-const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || "support@example.com";
-const BUSINESS_ADDRESS = process.env.BUSINESS_ADDRESS || "Your address";
-const BUSINESS_CITY = process.env.BUSINESS_CITY || "Your city";
-const BUSINESS_NAME = process.env.BUSINESS_NAME || "Your business name";
-const BUSINESS_COUNTRY = process.env.BUSINESS_COUNTRY || "Your country";
-```
-
-
 These Terms of Service ("Terms") govern your access to and use of this website and related services (the "Service"). By accessing or using the Service, you agree to these Terms.
 
 ## 1. Who We Are
 
-This Service is operated by **[${BUSINESS_NAME}]** ("we," "us," or "our").
+This Service is operated by **${BUSINESS_NAME}** ("we," "us," or "our").
 
-- Contact email: **[${SUPPORT_EMAIL}]**
-- Business address: **[${BUSINESS_ADDRESS}]**
+- Contact email: **${SUPPORT_EMAIL}**
+- Business address: **${BUSINESS_ADDRESS}**
 
 ## 2. Eligibility and Account Access
 
@@ -87,9 +86,9 @@ Sections that by their nature should survive termination (for example, limitatio
 
 ## 11. Governing Law
 
-These Terms are governed by the laws of **[${BUSINESS_COUNTRY}]**, without regard to conflict-of-law principles.
+These Terms are governed by the laws of **${BUSINESS_COUNTRY}**, without regard to conflict-of-law principles.
 
-Any disputes will be resolved in the courts located in **[${BUSINESS_CITY}]**, unless applicable law requires otherwise.
+Any disputes will be resolved in the courts located in **${BUSINESS_CITY}**, unless applicable law requires otherwise.
 
 ## 12. Changes to These Terms
 
@@ -101,5 +100,5 @@ Your continued use of the Service after changes become effective means you accep
 
 Questions about these Terms can be sent to:
 
-- Email: **[${SUPPORT_EMAIL}]**
-- Address: **[${BUSINESS_ADDRESS}]**
+- Email: **${SUPPORT_EMAIL}**
+- Address: **${BUSINESS_ADDRESS}**

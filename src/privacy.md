@@ -2,16 +2,18 @@
 title: Privacy Policy
 ---
 
-```JS
-import "dotenv/config";
+```js
+const config = await fetch("/site-config")
+	.then((response) => (response.ok ? response.json() : {}))
+	.catch(() => ({}));
 
-const PRIVACY_EMAIL = process.env.PRIVACY_EMAIL ||  "privacy@example.com";
-const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || "support@example.com";
-const BUSINESS_ADDRESS = process.env.BUSINESS_ADDRESS || "Your address";
-const BUSINESS_CITY = process.env.BUSINESS_CITY || "Your city";
-const BUSINESS_COUNTRY = process.env.BUSINESS_COUNTRY || "Your country";
-
+const PRIVACY_EMAIL = config.privacyEmail ?? "privacy@example.com";
+const SUPPORT_EMAIL = config.supportEmail ?? "support@example.com";
+const BUSINESS_ADDRESS = config.businessAddress ?? "Your address";
+const BUSINESS_CITY = config.businessCity ?? "Your city";
+const BUSINESS_COUNTRY = config.businessCountry ?? "Your country";
 ```
+
 # Privacy Policy
 
 Last updated: February 23, 2026
@@ -43,9 +45,9 @@ We may also disclose your information if required by law or in response to valid
 ## 4. Security of Your Information
 We take reasonable measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction using industry-standard security practices. However, no method of transmission over the internet or method of electronic storage is 100% secure, and we cannot guarantee absolute security.
 ## 5. Your Data Protection Rights
-Depending on your location, you may have certain rights regarding your personal information, such as the right to access, correct, delete, or restrict the use of your data. You can exercise these rights by contacting us at **[${PRIVACY_EMAIL}]**.
+Depending on your location, you may have certain rights regarding your personal information, such as the right to access, correct, delete, or restrict the use of your data. You can exercise these rights by contacting us at **${PRIVACY_EMAIL}**.
 ## 6. Changes to This Privacy Policy
 We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
 ## 7. Contact Us
-If you have any questions about this Privacy Policy, please contact us at **[${PRIVACY_EMAIL}]**.
+If you have any questions about this Privacy Policy, please contact us at **${PRIVACY_EMAIL}**.
 
