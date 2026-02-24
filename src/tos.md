@@ -4,6 +4,13 @@ title: Terms of Service
 
 ```js
 import "dotenv/config";
+```
+
+# Terms of Service
+
+Last updated: February 23, 2026
+
+```js
 const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || "support@example.com";
 const BUSINESS_ADDRESS = process.env.BUSINESS_ADDRESS || "Your address";
 const BUSINESS_CITY = process.env.BUSINESS_CITY || "Your city";
@@ -11,9 +18,6 @@ const BUSINESS_NAME = process.env.BUSINESS_NAME || "Your business name";
 const BUSINESS_COUNTRY = process.env.BUSINESS_COUNTRY || "Your country";
 ```
 
-# Terms of Service
-
-Last updated: February 23, 2026
 
 These Terms of Service ("Terms") govern your access to and use of this website and related services (the "Service"). By accessing or using the Service, you agree to these Terms.
 
