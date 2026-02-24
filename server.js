@@ -34,7 +34,7 @@ import rateLimit from "express-rate-limit";
 import {createProxyMiddleware} from "http-proxy-middleware";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === "dev";
 
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
 const FRAMEWORK_PORT = parseInt(process.env.FRAMEWORK_PORT ?? "3001", 10);
@@ -44,6 +44,12 @@ const REDIRECT_URI = `${BASE_URL}/auth/callback`;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL ?? "support@example.com";
+const PRIVACY_EMAIL = process.env.PRIVACY_EMAIL ?? SUPPORT_EMAIL;
+const BUSINESS_NAME = process.env.BUSINESS_NAME ?? "Your Company or Name";
+const BUSINESS_ADDRESS = process.env.BUSINESS_ADDRESS ?? "Your address";
+const BUSINESS_CITY = process.env.BUSINESS_CITY ?? "Your city";
+const BUSINESS_COUNTRY = process.env.BUSINESS_COUNTRY ?? "Your country";
 
 if (!SESSION_SECRET) {
   console.error("ERROR: SESSION_SECRET environment variable is required.");
@@ -174,6 +180,21 @@ app.get("/auth/user", authLimiter, (req, res) => {
   } else {
     res.status(401).json(null);
   }
+});
+
+/**
+ * GET /site-config
+ * Returns safe, public configuration values for client-rendered legal pages.
+ */
+app.get("/site-config", staticLimiter, (_req, res) => {
+  res.json({
+    supportEmail: SUPPORT_EMAIL,
+    privacyEmail: PRIVACY_EMAIL,
+    businessName: BUSINESS_NAME,
+    businessAddress: BUSINESS_ADDRESS,
+    businessCity: BUSINESS_CITY,
+    businessCountry: BUSINESS_COUNTRY
+  });
 });
 
 // ── Static / proxy ────────────────────────────────────────────────────────────
